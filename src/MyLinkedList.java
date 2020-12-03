@@ -13,14 +13,76 @@ public class MyLinkedList<T> implements Iterable<T> {
         return new Iter();
     }
 
-
-//    public ListIterator<T> listIterator() {
-//        return null;
-//    }
+    public ListIterator<T> listIterator() {
+        return new ListIter();
+    }
 
     public MyLinkedList() {
         first = null;
         last = null;
+    }
+
+    private class ListIter implements ListIterator<T> {
+        Node current = new Node(null, first);
+
+        @Override
+        public boolean hasNext() {
+            return current.getNext()!=null;
+        }
+
+        @Override
+        public T next() {
+            current = current.getNext();
+            return current.getValue();
+        }
+
+        @Override
+        public boolean hasPrevious() {
+            return current.getPrev()!=null;
+        }
+
+        @Override
+        public T previous() {
+            current = current.getPrev();
+            return current.getValue();
+        }
+
+        @Override
+        public int nextIndex() {
+            current = current.getNext();
+            return indexOf(current);
+        }
+
+        @Override
+        public int previousIndex() {
+            current = current.getPrev();
+            return indexOf(current);
+        }
+
+        @Override
+        public void remove() {
+            if(current.getNext()==null && current.getPrev()==null) {
+                first = null;
+                last = null;
+                size--;
+            }
+            else if (current.getPrev()==null) {
+                removeFirst();
+            }
+            else if (current.getNext()==null) {
+                removeLast();
+            }
+        }
+
+        @Override
+        public void set(T t) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void add(T t) {
+            throw new UnsupportedOperationException();
+        }
     }
 
     private class Iter implements Iterator<T> {
@@ -37,6 +99,20 @@ public class MyLinkedList<T> implements Iterable<T> {
             return current.getValue();
         }
 
+        @Override
+        public void remove() {
+            if(current.getNext()==null && current.getPrev()==null) {
+                first = null;
+                last = null;
+                size--;
+            }
+            else if (current.getPrev()==null) {
+                removeFirst();
+            }
+            else if (current.getNext()==null) {
+                removeLast();
+            }
+        }
     }
 
     private class Node {
@@ -162,6 +238,20 @@ public class MyLinkedList<T> implements Iterable<T> {
                 return index;
             }
             current = current.getNext();
+            index++;
+        }
+        return -1;
+    }
+
+    public final int indexOf(Node current) {
+        if (first == current.getPrev()) return 0;
+        Node n = first;
+        int index = 0;
+        while (current != null) {
+            if (n.getNext() == current.getPrev()) {
+                return ++index;
+            }
+            n = n.getNext();
             index++;
         }
         return -1;

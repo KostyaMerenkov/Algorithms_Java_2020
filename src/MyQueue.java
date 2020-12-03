@@ -1,6 +1,6 @@
 
 public class MyQueue<T> {
-    private MyLinkedList<T> queue= new MyLinkedList<>();
+    private MyLinkedList<T> queue = new MyLinkedList<>();
     public int size(){
         return queue.size();
     }
