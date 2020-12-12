@@ -3,6 +3,17 @@ import java.util.NoSuchElementException;
 
 public class MyTreeMap<Key extends Comparable<Key>, Value> {
     private Node root;
+    private int maxHeight = 0;
+
+    public void setMaxHeight(int maxHeight) {
+        this.maxHeight = maxHeight;
+    }
+
+    public int getMaxHeight() {
+        return maxHeight;
+    }
+
+
 
     private class Node {
         Key key;
@@ -10,12 +21,24 @@ public class MyTreeMap<Key extends Comparable<Key>, Value> {
         Node left;
         Node right;
         int size;
+        int height;
 
         public Node(Key key, Value value) {
             this.key = key;
             this.value = value;
             size = 1;
+            height = 0;
         }
+    }
+    public int height() {
+        return height(root);
+    }
+
+    private int height(Node node) {
+        if (node == null) {
+            return 0;
+        }
+        return node.height;
     }
 
     public int size() {
@@ -68,22 +91,30 @@ public class MyTreeMap<Key extends Comparable<Key>, Value> {
             //delete
             return;
         }
-        root = put(root, key, value);
+        int temp_height = 0;
+        root = put(root, key, value, temp_height);
     }
 
-    private Node put(Node node, Key key, Value value) {
+    private Node put(Node node, Key key, Value value, int theight) {
+
         if (node == null) {
-            return new Node(key, value);
+            Node tempNode = new Node(key, value);
+            tempNode.height = theight;
+            if (getMaxHeight() < theight) setMaxHeight(theight);
+            return tempNode;
         }
         int cmp = key.compareTo(node.key);
         if (cmp == 0) {
+            node.height = theight;
             node.value = value;
         } else if (cmp < 0) {
-            node.left = put(node.left, key, value);
+            node.left = put(node.left, key, value, ++theight);
         } else {
-            node.right = put(node.right, key, value);
+            node.right = put(node.right, key, value, ++theight);
         }
+
         node.size = size(node.left) + size(node.right) + 1;
+        if (getMaxHeight() < theight) setMaxHeight(theight);
         return node;
     }
 
@@ -159,5 +190,15 @@ public class MyTreeMap<Key extends Comparable<Key>, Value> {
             return "";
         }
         return toString(node.left) + " " + node.key + " " + toString(node.right);
+    }
+
+    private Boolean isBalanced(Node node) {
+        if(isEmpty()) return true;
+        if(node.left == null || node.right == null) { return true; }
+        return Math.abs(node.left.height - node.right.height)<=1 && isBalanced(node.left) && isBalanced(node.right);
+    }
+
+    public Boolean isBalanced() {
+        return isBalanced(root);
     }
 }

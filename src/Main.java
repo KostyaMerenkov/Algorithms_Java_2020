@@ -1,7 +1,13 @@
 
+import java.awt.*;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Random;
 import java.util.TreeMap;
 
 public class Main {
+
     public static void main(String[] args) {
         MyTreeMap<Integer, String> map = new MyTreeMap<>();
 
@@ -22,6 +28,24 @@ public class Main {
         map.delete(5);
         System.out.println(map);
         System.out.println(map.size());
+
+        ArrayList<MyTreeMap> trList = new ArrayList<>();
+
+
+
+        for (int i = 0; i < 20; i++) {
+            MyTreeMap<Integer, String> t1 = new MyTreeMap<>();
+            Random r = new Random();
+            r.setSeed(System.currentTimeMillis());
+            while (t1.getMaxHeight()<7)
+            {
+                int temp = (r.nextInt(200) - 100);
+                t1.put(temp, Integer.toString(temp));
+                //System.out.println(tree);
+                //System.out.println("new num " + temp + " tree height = "+tree.getMaxHeight());
+            }
+            System.out.println(t1.isBalanced());
+        }
 
         
     }
