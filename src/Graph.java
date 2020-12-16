@@ -1,4 +1,3 @@
-package lesson7;
 
 import java.util.LinkedList;
 
@@ -29,6 +28,7 @@ public class Graph {
     public LinkedList<Integer> getAdjList(int vertex) {
         return (LinkedList<Integer>) adjList[vertex].clone();
     }
+
 
     public void addEdge(int v1, int v2) {
         if (v1 < 0 || v2 < 0 || v1 >= vertexCount || v2 >= vertexCount) {
